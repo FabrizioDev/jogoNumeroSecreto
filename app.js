@@ -11,9 +11,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function exibirTextoNaTela(tag, texto) {
     const campo = document.querySelector(tag);
-    if (campo) {
-        campo.innerHTML = texto;
-        responsiveVoice.speak(texto, 'Brazilian Portuguese Female', { rate: 1.2 });
+    if ('speechSynthesis' in window) {
+        let utterance = new SpeechSynthesisUtterance(texto);
+        utterance.lang = 'pt-BR';
+        utterance.rate = 1.2;
+        window.speechSynthesis.speak(utterance);
+    } else {
+        console.log("Web Speech API não suportada neste navegador.");
     }
 }
 
@@ -50,7 +54,7 @@ function gerarNumeroAleatorio() {
     do {
         numeroEscolhido = Math.floor(Math.random() * numeroLimite) + 1;
     } while (listaDeNumerosSorteados.has(numeroEscolhido));
-    
+
     listaDeNumerosSorteados.add(numeroEscolhido);
     console.log("Números sorteados:", [...listaDeNumerosSorteados]);
     return numeroEscolhido;
